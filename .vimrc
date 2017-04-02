@@ -6,10 +6,16 @@ syntax on
 set autoindent
 set backspace=indent,eol,start
 set relativenumber
+set number 
 set ruler
 set showcmd
 set incsearch
 set diffopt=vertical 
+set wrap
+
+"Forces vim to use project specific .vimrc files if present
+set exrc
+set secure
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -19,6 +25,7 @@ call vundle#begin()
 " " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'honza/vim-snippets'
+Plugin 'Valloric/YouCompleteMe'
 "
 " " The following are examples of different formats supported.
 " " Keep Plugin commands between vundle#begin/end.
@@ -40,6 +47,7 @@ Plugin 'kien/ctrlp.vim'
 "autocomplete java
 Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'klen/python-mode'
+Plugin 'majutsushi/tagbar'
 "
 " " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'L9'
@@ -63,6 +71,7 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+let g:syntastic_java_javac_config_file_enabled = 1
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -80,6 +89,8 @@ filetype plugin indent on    " required
 " " To ignore plugin indent changes, instead use:
 filetype plugin on
 
+"Changes paradigm of file drawer to split file explorer
+"let NERDTreeHijackNetrw=1
 " "
 " " Brief help
 " " :PluginList       - lists configured plugins
@@ -95,10 +106,11 @@ filetype plugin on
 "
 "Remap the leader character
 let mapleader = "\<Space>" 
+let maplocalleader = "\\"
 "Map maximize splitted buffer to new full tab with t% command and get back to
 "splitted structure with td
-nmap <leader>M :tabedit %<CR>
-nmap <leader>m :tabclose<CR>
+nnoremap <leader>M :tabedit %<CR>
+nnoremap <leader>m :tabclose<CR>
 
 "first tab hit completes as much as possible, second show list of
 "possibilities and third try to solve cycling
@@ -106,15 +118,25 @@ set wildmode=longest,list,full
 set wildmenu
 
 "Map panes/splits operations with leader
-nmap <leader>v :vsp<CR>
-nmap <leader>o :sp<CR>
-nmap <leader>h <c-w><c-h>
-nmap <leader>j <c-w><c-j>
-nmap <leader>k <c-w><c-k>
-nmap <leader>l <c-w><c-l>
+nnoremap <leader>v :vsp<CR>
+nnoremap <leader>o :sp<CR>
+nnoremap <leader>h <c-w><c-h>
+nnoremap <leader>j <c-w><c-j>
+nnoremap <leader>k <c-w><c-k>
+noremap <leader>l <c-w><c-l>
+nnoremap <leader>s :TagbarToggle<CR>
+
 "map to NERDTree structure
 nnoremap <leader>t :NERDTree<CR>
 nnoremap <leader>f :grep 
+
+" in normal mode usefull
+noremap ; :
+noremap : ;
+"
+"don't exit visual mode when indenting with << and >>
+vnoremap > >gv
+vnoremap < <gv
 
 nnoremap <C-tab>   :tabnext<CR>
 nnoremap <C-S-tab>   :tabprevious<CR>
@@ -122,5 +144,6 @@ if has('gui_running')
 	colorscheme codeschool
 endif
 
+set tabstop=4 shiftwidth=4
 autocmd FileType javascript,html setlocal shiftwidth=2 tabstop=2
 autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4
